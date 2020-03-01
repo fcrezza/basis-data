@@ -1,0 +1,295 @@
+mysql -u root -p 
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5
+Server version: 5.7.27-0ubuntu0.18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database perpustakaan
+    -> ;
+Query OK, 1 row affected (0.19 sec)
+
+mysql> use perpustakaan;
+Database changed
+
+mysql> create table buku (id_buku int primary key auto_increment, judul varchar(60), tahun year, penerbit varchar(60), genre varchar(30), penulis varchar(40));
+Query OK, 0 rows affected (2.02 sec)
+
+mysql> describe buku;
++----------+-------------+------+-----+---------+----------------+
+| Field    | Type        | Null | Key | Default | Extra          |
++----------+-------------+------+-----+---------+----------------+
+| id_buku  | int(11)     | NO   | PRI | NULL    | auto_increment |
+| judul    | varchar(60) | YES  |     | NULL    |                |
+| tahun    | year(4)     | YES  |     | NULL    |                |
+| penerbit | varchar(60) | YES  |     | NULL    |                |
+| genre    | varchar(30) | YES  |     | NULL    |                |
+| penulis  | varchar(40) | YES  |     | NULL    |                |
++----------+-------------+------+-----+---------+----------------+
+6 rows in set (0.25 sec)
+
+mysql> create table member (id_member int primary key auto_increment, nama varchar(40), alamat varchar(40), jk char(1), aktif_sejak date);
+Query OK, 0 rows affected (0.68 sec)
+
+mysql> describe member;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| id_member   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama        | varchar(40) | YES  |     | NULL    |                |
+| alamat      | varchar(40) | YES  |     | NULL    |                |
+| jk          | char(1)     | YES  |     | NULL    |                |
+| aktif_sejak | date        | YES  |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+5 rows in set (0.15 sec)
+
+mysql> create table denda (id_denda int primary key auto_increment, nominal int, keterangan varchar(40));
+Query OK, 0 rows affected (0.43 sec)
+
+mysql> describe denda;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| id_denda   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nominal    | int(11)     | YES  |     | NULL    |                |
+| keterangan | varchar(40) | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+3 rows in set (0.02 sec)
+
+mysql> alter table denda add id_member int;
+Query OK, 0 rows affected (1.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table denda add foreign key (id_member) references member(id_member);
+Query OK, 0 rows affected (1.13 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe denda;                                                    +------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| id_denda   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nominal    | int(11)     | YES  |     | NULL    |                |
+| keterangan | varchar(40) | YES  |     | NULL    |                |
+| id_member  | int(11)     | YES  | MUL | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> alter table member add column id_petugas int;
+Query OK, 0 rows affected (0.65 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe member;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| id_member   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama        | varchar(40) | YES  |     | NULL    |                |
+| alamat      | varchar(40) | YES  |     | NULL    |                |
+| jk          | char(1)     | YES  |     | NULL    |                |
+| aktif_sejak | date        | YES  |     | NULL    |                |
+| id_petugas  | int(11)     | YES  |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+6 rows in set (0.01 sec)
+
+mysql> create table petugas (id_petugas int primary key auto_Increment, nama varchar(40), jk char(1), alamat varchar(40))
+    -> ;                                                                  Query OK, 0 rows affected (0.39 sec)
+
+mysql> describe petugas;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| id_petugas | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama       | varchar(40) | YES  |     | NULL    |                |
+| jk         | char(1)     | YES  |     | NULL    |                |
+| alamat     | varchar(40) | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+4 rows in set (0.04 sec)
+
+mysql> alter table member add foreign key (id_petugas) references petugas(id_petugas);
+Query OK, 0 rows affected (0.97 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe member;                                                   +-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| id_member   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama        | varchar(40) | YES  |     | NULL    |                |
+| alamat      | varchar(40) | YES  |     | NULL    |                |
+| jk          | char(1)     | YES  |     | NULL    |                |
+| aktif_sejak | date        | YES  |     | NULL    |                |
+| id_petugas  | int(11)     | YES  | MUL | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> show tables;
++------------------------+
+| Tables_in_perpustakaan |
++------------------------+
+| buku                   |
+| denda                  |
+| member                 |
+| petugas                |
++------------------------+
+4 rows in set (0.00 sec)
+
+mysql> create table peminjaman (id_tranksaksi int primary key auto_increment, id_member int, id_buku int, dipinjam date, batas_pengembalian date); 
+Query OK, 0 rows affected (0.66 sec)
+
+mysql> alter table peminjaman add foreign key (id_member) references member(id_member);
+Query OK, 0 rows affected (0.93 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table peminjaman add foreign key (id_buku) references buku(id_buku);
+Query OK, 0 rows affected (1.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe peminjaman;
++--------------------+---------+------+-----+---------+----------------+
+| Field              | Type    | Null | Key | Default | Extra          |
++--------------------+---------+------+-----+---------+----------------+
+| id_tranksaksi      | int(11) | NO   | PRI | NULL    | auto_increment |
+| id_member          | int(11) | YES  | MUL | NULL    |                |
+| id_buku            | int(11) | YES  | MUL | NULL    |                |
+| dipinjam           | date    | YES  |     | NULL    |                |
+| batas_pengembalian | date    | YES  |     | NULL    |                |
++--------------------+---------+------+-----+---------+----------------+
+5 rows in set (0.03 sec)
+
+mysql> show tables;
++------------------------+
+| Tables_in_perpustakaan |
++------------------------+
+| buku                   |
+| denda                  |
+| member                 |
+| peminjaman             |
+| petugas                |
++------------------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into petugas (nama, jk, alamat) values ('Hendra Setyanto', 'L', 'Serang'), ('Lina Widya Lestari', 'P', 'Demak');
+Query OK, 2 rows affected (0.15 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from petugas;
++------------+--------------------+------+--------+
+| id_petugas | nama               | jk   | alamat |
++------------+--------------------+------+--------+
+|          1 | Hendra Setyanto    | L    | Serang |
+|          2 | Lina Widya Lestari | P    | Demak  |
++------------+--------------------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql> insert into buku (judul, tahun, penerbit, genre, penulis) values ('Kami (Bukan) Sarjana Kertas', 2019, 'PT. Bukune Kreatif Cipta', 'Pendidikan', 'J. S. Khairen'), ('Orang-Orang Biasa', 2019, 'PT. Bentang Pustaka', 'Fiksi', 'Andre  Hirata');
+Query OK, 2 rows affected (0.11 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from buku;
++---------+-----------------------------+-------+--------------------------+------------+---------------+
+| id_buku | judul                       | tahun | penerbit                 | genre      | penulis       |
++---------+-----------------------------+-------+--------------------------+------------+---------------+
+|       1 | Kami (Bukan) Sarjana Kertas |  2019 | PT. Bukune Kreatif Cipta | Pendidikan | J. S. Khairen |
+|       2 | Orang-Orang Biasa           |  2019 | PT. Bentang Pustaka      | Fiksi      | Andre  Hirata |
++---------+-----------------------------+-------+--------------------------+------------+---------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into buku (judul, tahun, penerbit, genre, penulis) values ('KKN Di Desa Penari', 2019, 'BUKUNE', 'horor', 'Simpleman'), ('Pesan Cinta Untuk Kau & Aku', 2019, 'Magenta Media', 'Novel', '@ayatsuci'), ('Merdeka Sejak Hati', 2019, 'Gramedia Pustaka Utama', 'Novel', 'A. Fuadi');
+Query OK, 3 rows affected (1.55 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from buku;                                                +---------+-----------------------------+-------+--------------------------+------------+---------------+
+| id_buku | judul                       | tahun | penerbit                 | genre      | penulis       |
++---------+-----------------------------+-------+--------------------------+------------+---------------+
+|       1 | Kami (Bukan) Sarjana Kertas |  2019 | PT. Bukune Kreatif Cipta | Pendidikan | J. S. Khairen |
+|       2 | Orang-Orang Biasa           |  2019 | PT. Bentang Pustaka      | Fiksi      | Andre  Hirata |
+|       3 | KKN Di Desa Penari          |  2019 | BUKUNE                   | horor      | Simpleman     |
+|       4 | Pesan Cinta Untuk Kau & Aku |  2019 | Magenta Media            | Novel      | @ayatsuci     |
+|       5 | Merdeka Sejak Hati          |  2019 | Gramedia Pustaka Utama   | Novel      | A. Fuadi      |
++---------+-----------------------------+-------+--------------------------+------------+---------------+
+5 rows in set (0.10 sec)
+
+mysql> insert into member (nama, alamat, jk, aktif_sejak, id_petugas) values ('Doni', 'Kretek', 'L', '2019-02-20', 1), ('Arif', 'Kebumen', 'L', '2018-06-01', 1), ('Usman', 'Koeripan', 'L', '2019-11-16', 1), ('Reza', 'Garoeng', 'L', '2019-09-07', 1), ('Panjoel', 'Yogyakarta', 'L', '2016-06-09', 1);
+Query OK, 5 rows affected (0.32 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from member;
++-----------+---------+------------+------+-------------+------------+
+| id_member | nama    | alamat     | jk   | aktif_sejak | id_petugas |
++-----------+---------+------------+------+-------------+------------+
+|         1 | Doni    | Kretek     | L    | 2019-02-20  |          1 |
+|         2 | Arif    | Kebumen    | L    | 2018-06-01  |          1 |
+|         3 | Usman   | Koeripan   | L    | 2019-11-16  |          1 |
+|         4 | Reza    | Garoeng    | L    | 2019-09-07  |          1 |
+|         5 | Panjoel | Yogyakarta | L    | 2016-06-09  |          1 |
++-----------+---------+------------+------+-------------+------------+
+5 rows in set (0.02 sec)
+
+mysql> insert into denda (nominal, keterangan, id_member) values (5000, 'tidak mengembalikan buku > 1 minggu', 1), (10000, 'tidak mengembalikan buku > 2 minggu', 3);
+Query OK, 2 rows affected (0.16 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from denda;
++----------+---------+-------------------------------------+-----------+
+| id_denda | nominal | keterangan                          | id_member |
++----------+---------+-------------------------------------+-----------+
+|        1 |    5000 | tidak mengembalikan buku > 1 minggu |         1 |
+|        2 |   10000 | tidak mengembalikan buku > 2 minggu |         3 |
++----------+---------+-------------------------------------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> select * from peminjaman;
++---------------+-----------+---------+------------+--------------------+
+| id_tranksaksi | id_member | id_buku | dipinjam   | batas_pengembalian |
++---------------+-----------+---------+------------+--------------------+
+|             1 |         1 |       1 | 2019-05-04 | 2019-05-11         |
++---------------+-----------+---------+------------+--------------------+
+1 row in set (0.01 sec)
+
+mysql> insert into peminjaman (id_member, id_buku, dipinjam, batas_pengembalian) values (2, 2, '2019-01-01', date_add(dipinjam, interval 7 day));
+Query OK, 1 row affected (0.11 sec)
+
+mysql> select * from peminjaman;
++---------------+-----------+---------+------------+--------------------+
+| id_tranksaksi | id_member | id_buku | dipinjam   | batas_pengembalian |
++---------------+-----------+---------+------------+--------------------+
+|             1 |         1 |       1 | 2019-05-04 | 2019-05-11         |
+|             2 |         2 |       2 | 2019-01-01 | 2019-01-08         |
++---------------+-----------+---------+------------+--------------------+
+2 rows in set (0.01 sec)
+
+mysql> insert into peminjaman (id_member, id_buku, dipinjam, batas_pengembalian) values (3, 2, '2019-02-01', date_add(dipinjam, interval 7 day)), (4, 3, '2019-01-01', date_add(dipinjam, interval 7 day));
+Query OK, 2 rows affected (0.12 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from peminjaman;
++---------------+-----------+---------+------------+--------------------+
+| id_tranksaksi | id_member | id_buku | dipinjam   | batas_pengembalian |
++---------------+-----------+---------+------------+--------------------+
+|             1 |         1 |       1 | 2019-05-04 | 2019-05-11         |
+|             2 |         2 |       2 | 2019-01-01 | 2019-01-08         |
+|             3 |         3 |       2 | 2019-02-01 | 2019-02-08         |
+|             4 |         4 |       3 | 2019-01-01 | 2019-01-08         |
++---------------+-----------+---------+------------+--------------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into peminjaman (id_member, id_buku, dipinjam, batas_pengembalian) values (5, 5, '2019-11-09', date_add(dipinjam, interval 7 day));
+Query OK, 1 row affected (0.06 sec)
+
+mysql> select * from peminjaman;
++---------------+-----------+---------+------------+--------------------+
+| id_tranksaksi | id_member | id_buku | dipinjam   | batas_pengembalian |
++---------------+-----------+---------+------------+--------------------+
+|             1 |         1 |       1 | 2019-05-04 | 2019-05-11         |
+|             2 |         2 |       2 | 2019-01-01 | 2019-01-08         |
+|             3 |         3 |       2 | 2019-02-01 | 2019-02-08         |
+|             4 |         4 |       3 | 2019-01-01 | 2019-01-08         |
+|             5 |         5 |       5 | 2019-11-09 | 2019-11-16         |
++---------------+-----------+---------+------------+--------------------+
+5 rows in set (0.00 sec)
